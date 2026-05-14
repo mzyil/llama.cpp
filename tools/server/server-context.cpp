@@ -3240,7 +3240,6 @@ private:
 
                 const auto ids = std::move(slot.spec_draft);
 
-                slot.n_decoded += ids.size();
                 slot.t_token_generation = std::max<int64_t>(1, t_current - slot.t_start_generation) / 1e3;
 
                 // update how many tokens out of those tested were accepted
@@ -3266,6 +3265,8 @@ private:
                     result.prob         = 1.0f; // set later
 
                     // TODO: set result.probs
+
+                    slot.n_decoded += 1;
 
                     if (!process_token(result, slot)) {
                         slot.print_timings();
