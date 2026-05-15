@@ -1381,14 +1381,3 @@ jobs:
               }
             }
 
-  webui-publish:
-    if: false
-
-    needs:
-      - release
-
-    uses: ./.github/workflows/webui-publish.yml
-    with:
-      version_tag: ${{ needs.release.outputs.tag_name }}
-    secrets:
-      hf_token: ${{ secrets.HF_TOKEN_WEBUI_STATIC_OUTPUT }}
