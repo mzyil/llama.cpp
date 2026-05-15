@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a GitHub release'
+        required: false
+        default: 'true'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
@@ -14,6 +19,7 @@ env:
 jobs:
 
   macOS-cpu:
+    if: false
 
     strategy:
       matrix:
@@ -85,6 +91,7 @@ jobs:
           name: llama-bin-macos-${{ matrix.build }}.tar.gz
 
   ubuntu-cpu:
+    if: false
 
     strategy:
       matrix:
@@ -162,6 +169,7 @@ jobs:
           name: llama-bin-ubuntu-${{ matrix.build }}.tar.gz
 
   ubuntu-vulkan:
+    if: false
 
     strategy:
       matrix:
@@ -238,6 +246,7 @@ jobs:
           name: llama-bin-ubuntu-vulkan-${{ matrix.build }}.tar.gz
 
   android-arm64:
+    if: false
 
     runs-on: ubuntu-latest
 
@@ -315,6 +324,7 @@ jobs:
           name: llama-bin-android-arm64.tar.gz
 
   ubuntu-24-openvino:
+    if: false
 
     runs-on: ubuntu-24.04
 
@@ -477,10 +487,6 @@ jobs:
             arch: 'x64'
             defines: '-DGGML_VULKAN=ON'
             target: 'ggml-vulkan'
-          - backend: 'opencl-adreno'
-            arch: 'arm64'
-            defines: '-G "Ninja Multi-Config" -D CMAKE_TOOLCHAIN_FILE=cmake/arm64-windows-llvm.cmake -DCMAKE_PREFIX_PATH="$env:RUNNER_TEMP/opencl-arm64-release" -DGGML_OPENCL=ON -DGGML_OPENCL_USE_ADRENO_KERNELS=ON'
-            target: 'ggml-opencl'
 
     steps:
       - name: Clone
@@ -632,6 +638,7 @@ jobs:
           name: cudart-llama-bin-win-cuda-${{ matrix.cuda }}-x64.zip
 
   windows-sycl:
+    if: false
 
     runs-on: windows-2022
 
@@ -745,6 +752,7 @@ jobs:
           name: llama-bin-win-sycl-x64.zip
 
   ubuntu-24-sycl:
+    if: false
 
     strategy:
       matrix:
@@ -839,6 +847,7 @@ jobs:
           name: llama-bin-ubuntu-sycl-${{ matrix.build }}-x64.tar.gz
 
   ubuntu-22-rocm:
+    if: false
 
     runs-on: ubuntu-22.04
 
@@ -950,6 +959,7 @@ jobs:
           name: llama-bin-ubuntu-rocm-${{ env.ROCM_VERSION_SHORT }}-${{ matrix.build }}.tar.gz
 
   windows-hip:
+    if: false
 
     runs-on: windows-2022
 
@@ -1064,6 +1074,7 @@ jobs:
           name: llama-bin-win-hip-${{ matrix.name }}-x64.zip
 
   ios-xcode-build:
+    if: false
     runs-on: macos-15
 
     steps:
@@ -1120,6 +1131,7 @@ jobs:
 
 
   openEuler-cann:
+    if: false
     strategy:
       matrix:
         include:
@@ -1223,17 +1235,6 @@ jobs:
       - windows
       - windows-cpu
       - windows-cuda
-      - windows-sycl
-      - windows-hip
-      - ubuntu-22-rocm
-      - ubuntu-cpu
-      - ubuntu-vulkan
-      - ubuntu-24-openvino
-      - ubuntu-24-sycl
-      - android-arm64
-      - macOS-cpu
-      - ios-xcode-build
-      - openEuler-cann
 
     outputs:
       tag_name: ${{ steps.tag.outputs.name }}
@@ -1290,8 +1291,8 @@ jobs:
           done
 
           echo "Moving other artifacts..."
-          mv -v artifact/*.zip release
-          mv -v artifact/*.tar.gz release
+          mv -v artifact/*.zip release 2>/dev/null || true
+          mv -v artifact/*.tar.gz release 2>/dev/null || true
 
       - name: Create release
         id: create_release
@@ -1365,7 +1366,7 @@ jobs:
             }
 
   ui-publish:
-    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) || github.event.inputs.create_release == 'true' }}
+    if: false
 
     needs:
       - release
