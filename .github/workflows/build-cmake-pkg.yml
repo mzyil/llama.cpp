@@ -1,6 +1,7 @@
 name: Build relocatable cmake package
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   linux:
