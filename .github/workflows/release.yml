@@ -607,7 +607,6 @@ jobs:
             -DGGML_CPU=OFF ^
             -DGGML_CUDA=ON ^
             -DCMAKE_CUDA_ARCHITECTURES=89 ^
-            -DGGML_CUDA_F16=ON ^
             -DGGML_CUDA_FA_ALL_QUANTS=ON ^
             -DLLAMA_BUILD_BORINGSSL=ON ^
             -DGGML_CUDA_CUB_3DOT2=ON
