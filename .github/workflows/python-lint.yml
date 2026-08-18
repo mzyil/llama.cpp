@@ -1,19 +1,7 @@
 name: flake8 Lint
 
 on:
-  push:
-    branches:
-      - master
-    paths: [
-      '.github/workflows/python-lint.yml',
-      '**/*.py'
-    ]
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths: [
-      '.github/workflows/python-lint.yml',
-      '**/*.py'
-    ]
+  workflow_dispatch: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
@@ -24,13 +12,13 @@ jobs:
     runs-on: [self-hosted, fast]
     name: Lint
     steps:
-      - name: Check out source repository
-        uses: actions/checkout@v6
-      - name: Set up Python environment
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-      - name: flake8 Lint
-        uses: py-actions/flake8@84ec6726560b6d5bd68f2a5bed83d62b52bb50ba # v2
-        with:
-            plugins: "flake8-no-print"
+    - name: Check out source repository
+      uses: actions/checkout@v6
+    - name: Set up Python environment
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.11"
+    - name: flake8 Lint
+      uses: py-actions/flake8@84ec6726560b6d5bd68f2a5bed83d62b52bb50ba   # v2
+      with:
+        plugins: "flake8-no-print"

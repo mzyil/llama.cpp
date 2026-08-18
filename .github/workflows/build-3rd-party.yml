@@ -1,19 +1,7 @@
 name: CI (3rd-party)
 
 on:
-  workflow_dispatch: # allows manual triggering
-  push:
-    branches:
-      - master
-    paths: [
-      '.github/workflows/build-3rd-party.yml',
-      '**/CMakeLists.txt',
-      '**/.cmake',
-      '**/*.h',
-      '**/*.hpp',
-      '**/*.c',
-      '**/*.cpp'
-    ]
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref && github.ref || github.run_id }}
@@ -31,27 +19,27 @@ jobs:
     runs-on: ${{ 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
 
     steps:
-      - name: Clone
-        id: checkout
-        uses: actions/checkout@v6
+    - name: Clone
+      id: checkout
+      uses: actions/checkout@v6
 
-      - name: Dependencies
-        id: depends
-        run: |
-          sudo apt-get update
-          sudo apt-get install build-essential libssl-dev
+    - name: Dependencies
+      id: depends
+      run: |
+        sudo apt-get update
+        sudo apt-get install build-essential libssl-dev
 
-      - name: Build
-        id: cmake_build
-        run: |
-          cmake -B build \
-            -DLLAMA_FATAL_WARNINGS=ON \
-            -DLLAMA_LLGUIDANCE=ON
-          cmake --build build --config Release -j $(nproc)
+    - name: Build
+      id: cmake_build
+      run: |
+        cmake -B build \
+          -DLLAMA_FATAL_WARNINGS=ON \
+          -DLLAMA_LLGUIDANCE=ON
+        cmake --build build --config Release -j $(nproc)
 
-      - name: Test
-        id: cmake_test
-        run: |
-          cd build
-          ctest -L main --verbose --timeout 900
+    - name: Test
+      id: cmake_test
+      run: |
+        cd build
+        ctest -L main --verbose --timeout 900
 

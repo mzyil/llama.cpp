@@ -1,7 +1,6 @@
 name: "Pull Request Labeler"
 on:
-- pull_request_target
-
+  workflow_dispatch: {}
 jobs:
   labeler:
     permissions:
@@ -15,3 +14,4 @@ jobs:
     - uses: actions/labeler@v6
       with:
         configuration-path: '.github/labeler.yml'
+    if: github.event_name == 'pull_request_target'
