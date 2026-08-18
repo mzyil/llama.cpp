@@ -947,12 +947,6 @@ jobs:
       id: checkout
       uses: actions/checkout@v6
 
-    - name: Apply FastMTP patch
-      run: |
-        curl.exe -L -o HauhauCS-FastMTP-llama.cpp.patch "${{ env.FASTMTP_PATCH_URL }}"
-        git apply --check HauhauCS-FastMTP-llama.cpp.patch
-        git apply HauhauCS-FastMTP-llama.cpp.patch
-
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
@@ -1050,6 +1044,12 @@ jobs:
       id: checkout
       uses: actions/checkout@v6
 
+    - name: Apply FastMTP patch
+      run: |
+        curl.exe -L -o HauhauCS-FastMTP-llama.cpp.patch "${{ env.FASTMTP_PATCH_URL }}"
+        git apply --check HauhauCS-FastMTP-llama.cpp.patch
+        git apply HauhauCS-FastMTP-llama.cpp.patch
+
     - name: Setup Node.js
       uses: actions/setup-node@v6
       with:
@@ -1076,7 +1076,7 @@ jobs:
     - name: Build
       id: cmake_build
       shell: cmd
-        # TODO: Remove GGML_CUDA_CUB_3DOT2 flag once CCCL 3.2 is bundled within CTK and that CTK version is used in this project
+      # TODO: Remove GGML_CUDA_CUB_3DOT2 flag once CCCL 3.2 is bundled within CTK and that CTK version is used in this project
       run: |
         call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.arch == 'x64' && 'x64' || 'amd64_arm64' }}
         cmake -S . -B build -G "Ninja Multi-Config" ^
