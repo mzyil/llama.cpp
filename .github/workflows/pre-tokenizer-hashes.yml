@@ -2,6 +2,8 @@ name: Check Pre-Tokenizer Hashes
 
 on:
   workflow_dispatch: {}
+permissions:
+  contents: read
 jobs:
   pre-tokenizer-hashes:
     runs-on: [self-hosted, fast]

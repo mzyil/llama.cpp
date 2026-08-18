@@ -2,6 +2,8 @@ name: Update Operations Documentation
 
 on:
   workflow_dispatch: {}
+permissions:
+  contents: read
 jobs:
   update-ops-docs:
     runs-on: [self-hosted, fast, ARM64]
